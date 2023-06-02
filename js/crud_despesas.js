@@ -85,6 +85,8 @@ function cadastrar_desp(){
     if (despesa.cat_desp == "Outra") {
         if (!validar_desp(despesa.desc_desp, document.querySelector("#descricao_desp"))) return
     }
+    if (!validar_valor(despesa.cons_desp, document.querySelector("#consumo_desp"))) return
+    if (!validar_valor(despesa.valor_desp, document.querySelector("#valor_desp"))) return
 
 
     if (edit_desp == true) {
@@ -111,6 +113,19 @@ function cadastrar_desp(){
 // Validação
 function validar_desp(valor, campo){
     if(valor == ""){
+        campo.classList.add("is-invalid")
+        campo.classList.remove("is-valid")
+        return false
+    }
+
+    campo.classList.remove("is-invalid")
+    campo.classList.add("is-valid")
+    return true
+
+}
+
+function validar_valor(valor, campo){
+    if(valor <= 0){
         campo.classList.add("is-invalid")
         campo.classList.remove("is-valid")
         return false
