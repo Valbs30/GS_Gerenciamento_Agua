@@ -89,7 +89,6 @@ function cadastrar_desp(){
 
     if (edit_desp == true) {
         let despesaEdita = despesas.find((despesa) => despesa.id_desp == id_desp)
-
         if (despesaEdita) {
             despesaEdita.nome_desp = document.querySelector("#nome_desp").value
             despesaEdita.data_desp = document.querySelector("#data_desp").value
@@ -131,8 +130,9 @@ function formatarMonth(valor) {
 
 // Editar
 function editar_desp(id_desp){
-    const despesa = despesas.find((despesa) => despesa.id_desp == id_desp)
+    let despesa = despesas.find((despesa) => despesa.id_desp == id_desp)
     
+    document.querySelector("#id_desp").value = despesa.id_desp
     document.querySelector("#nome_desp").value = despesa.nome_desp
     document.querySelector("#data_desp").value = despesa.data_desp
     document.querySelector("#consumo_desp").value = despesa.cons_desp

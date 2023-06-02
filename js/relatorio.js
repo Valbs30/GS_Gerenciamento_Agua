@@ -14,7 +14,7 @@ function atualizar_rel() {
   document.querySelector("#relatorios").innerHTML = ""
   localStorage.setItem("relatorios", JSON.stringify(relatorios))
   relatorios.forEach((relatorio) => {
-    document.querySelector("#relatorios").innerHTML += gerar_relatorio(despesasArmazenadas, relatorio)
+    document.querySelector("#relatorios").innerHTML += gerar_relatorio(relatorio)
   })
 }
 
@@ -51,7 +51,9 @@ function calculos_relatorio(despesasArmazenadas) {
     total_consumo: soma_consumo,
     media_valor: media_valor,
     media_consumo: media_consumo,
-    num_despesas: num_despesas
+    num_despesas: num_despesas,
+    despesasArmazenadas: despesasArmazenadas,
+    datahora: obterDataHoraLocal()
   }
 
   return relatorio
@@ -78,17 +80,19 @@ function obterDataHoraLocal() {
   return datahora
 }
 
-function gerar_relatorio(despesasArmazenadas, relatorio) {
+function gerar_relatorio(relatorio) {
   function criar_linhas_despesas() {
     let linhas = ''
-    for (let i = 0; i < despesasArmazenadas.length; i++) {
+    for (let i = 0; i < relatorio.despesasArmazenadas.length; i++) {
+      let status = relatorio.despesasArmazenadas[i].stpaga_desp ? "Pago" : "Pendente"
       linhas += `
                 <tr>
-                    <th scope="row">${despesasArmazenadas[i].nome_desp}</th>
-                    <td>${formatarMonth(despesasArmazenadas[i].data_desp)}</td>
-                    <td>${despesasArmazenadas[i].cons_desp}</td>
-                    <td>${despesasArmazenadas[i].valor_desp}</td>
-                    <td>${despesasArmazenadas[i].cat_desp}</td>
+                    <th scope="row">${relatorio.despesasArmazenadas[i].nome_desp}</th>
+                    <td>${formatarMonth(relatorio.despesasArmazenadas[i].data_desp)}</td>
+                    <td>${relatorio.despesasArmazenadas[i].cons_desp}</td>
+                    <td>${relatorio.despesasArmazenadas[i].valor_desp}</td>
+                    <td>${relatorio.despesasArmazenadas[i].cat_desp}</td>
+                    <td>${status}</td>
                 </tr>
             `
     }
@@ -99,7 +103,7 @@ function gerar_relatorio(despesasArmazenadas, relatorio) {
       <div id="estrutura_rel" class="bg-dark rounded m-3">
         <div class="d-flex align-items-start">
           <h1 class="text-white flex-grow-1 px-3 py-2">Relatório Consolidado de Consumos</h1>
-          <p class="text-white m-3">Relatório gerado no dia ${obterDataHoraLocal()}</p> 
+          <p class="text-white m-3">Relatório gerado no dia ${relatorio.datahora}</p> 
           <a onClick="apagar_rel(${relatorio.id_relatorio})" href="#" class="btn btn-danger m-3" title="Apagar relatorio">
             <i class="bi bi-trash"></i>
           </a>
@@ -114,6 +118,7 @@ function gerar_relatorio(despesasArmazenadas, relatorio) {
                             <th scope="col">Consumo (m³)</th>
                             <th scope="col">Valor (R$)</th>
                             <th scope="col">Categoria</th>
+                            <th scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -124,6 +129,7 @@ function gerar_relatorio(despesasArmazenadas, relatorio) {
                             <td>-</td>
                             <td>${relatorio.total_consumo}</td>
                             <td>${relatorio.total_valor}</td>
+                            <td>-</td>
                             <td>-</td>
                         </tr>
                     </tbody>
