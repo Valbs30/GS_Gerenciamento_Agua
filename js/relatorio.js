@@ -42,6 +42,9 @@ function calculos_relatorio(despesasArmazenadas) {
     const media_valor = (soma_valor / num_despesas).toFixed(2)
     const media_consumo = (soma_consumo / num_despesas).toFixed(2)
 
+    soma_consumo = (soma_consumo).toFixed(2)
+    soma_valor = (soma_valor).toFixed(2)
+
     // Gerar o relatório
     const relatorio = {
         id_relatorio: Date.now(),
